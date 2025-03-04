@@ -13,6 +13,7 @@ interface ResultsSummaryProps {
   timeToPayFixedCustom: number;
   initialMinimumPayment: number;
   fixedAmount: number;
+  currencyCode: string;
 }
 
 const ResultsSummary: React.FC<ResultsSummaryProps> = ({
@@ -25,6 +26,7 @@ const ResultsSummary: React.FC<ResultsSummaryProps> = ({
   timeToPayFixedCustom,
   initialMinimumPayment,
   fixedAmount,
+  currencyCode,
 }) => {
   const formatTime = (months: number): string => {
     const years = Math.floor(months / 12);
@@ -76,11 +78,11 @@ const ResultsSummary: React.FC<ResultsSummaryProps> = ({
         </div>
         <div className="space-y-1">
           <p className="text-sm text-muted-foreground">Total Paid</p>
-          <p className="text-2xl font-semibold">{formatCurrency(totalPaid)}</p>
+          <p className="text-2xl font-semibold">{formatCurrency(totalPaid, currencyCode)}</p>
         </div>
         <div className="space-y-1">
           <p className="text-sm text-muted-foreground">Interest Paid</p>
-          <p className="text-2xl font-semibold">{formatCurrency(calculateInterestPaid(totalPaid))}</p>
+          <p className="text-2xl font-semibold">{formatCurrency(calculateInterestPaid(totalPaid), currencyCode)}</p>
         </div>
       </CardContent>
     </Card>
@@ -101,10 +103,10 @@ const ResultsSummary: React.FC<ResultsSummaryProps> = ({
         />
         <SummaryCard
           title="Scenario 2"
-          description={`Fixed Payment (${formatCurrency(initialMinimumPayment)})`}
+          description={`Fixed Payment Equal to Initial Minimum (${formatCurrency(initialMinimumPayment, currencyCode)})`}
           totalPaid={totalPaidFixedMinimum}
           timeToPay={timeToPayFixedMinimum}
-          payment={formatCurrency(initialMinimumPayment)}
+          payment={formatCurrency(initialMinimumPayment, currencyCode)}
           colorClass="border-scenario2"
           animationDelay="animate-delay-200"
         />
@@ -113,7 +115,7 @@ const ResultsSummary: React.FC<ResultsSummaryProps> = ({
           description="Custom Fixed Payment"
           totalPaid={totalPaidFixedCustom}
           timeToPay={timeToPayFixedCustom}
-          payment={formatCurrency(fixedAmount)}
+          payment={formatCurrency(fixedAmount, currencyCode)}
           colorClass="border-scenario3"
           animationDelay="animate-delay-300"
         />

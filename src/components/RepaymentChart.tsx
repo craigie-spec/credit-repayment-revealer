@@ -27,6 +27,7 @@ interface RepaymentChartProps {
   fixedCustomPayments: RepaymentScenario[];
   initialMinimumPayment: number;
   fixedAmount: number;
+  currencyCode: string;
 }
 
 const RepaymentChart: React.FC<RepaymentChartProps> = ({
@@ -35,6 +36,7 @@ const RepaymentChart: React.FC<RepaymentChartProps> = ({
   fixedCustomPayments,
   initialMinimumPayment,
   fixedAmount,
+  currencyCode,
 }) => {
   const [activeTab, setActiveTab] = useState<string>("balance");
 
@@ -105,7 +107,7 @@ const RepaymentChart: React.FC<RepaymentChartProps> = ({
 
   // Custom tooltip formatter
   const formatTooltipValue = (value: number) => {
-    return formatCurrency(value);
+    return formatCurrency(value, currencyCode);
   };
 
   const CustomTooltip = ({ active, payload, label }: any) => {
@@ -151,7 +153,7 @@ const RepaymentChart: React.FC<RepaymentChartProps> = ({
             <Line
               type="monotone"
               dataKey="balanceFixedMinimum"
-              name={`Fixed (${formatCurrency(initialMinimumPayment)})`}
+              name={`Fixed Payment Equal to Initial Minimum (${formatCurrency(initialMinimumPayment, currencyCode)})`}
               stroke="#5A9AFF"
               strokeWidth={3}
               dot={false}
@@ -161,7 +163,7 @@ const RepaymentChart: React.FC<RepaymentChartProps> = ({
             <Line
               type="monotone"
               dataKey="balanceFixedCustom"
-              name={`Fixed (${formatCurrency(fixedAmount)})`}
+              name={`Fixed Custom Payment (${formatCurrency(fixedAmount, currencyCode)})`}
               stroke="#5AFF8F"
               strokeWidth={3}
               dot={false}
@@ -187,7 +189,7 @@ const RepaymentChart: React.FC<RepaymentChartProps> = ({
             <Line
               type="monotone"
               dataKey="paymentFixedMinimum"
-              name={`Fixed (${formatCurrency(initialMinimumPayment)})`}
+              name={`Fixed Payment Equal to Initial Minimum (${formatCurrency(initialMinimumPayment, currencyCode)})`}
               stroke="#5A9AFF"
               strokeWidth={3}
               dot={false}
@@ -197,7 +199,7 @@ const RepaymentChart: React.FC<RepaymentChartProps> = ({
             <Line
               type="monotone"
               dataKey="paymentFixedCustom"
-              name={`Fixed (${formatCurrency(fixedAmount)})`}
+              name={`Fixed Custom Payment (${formatCurrency(fixedAmount, currencyCode)})`}
               stroke="#5AFF8F"
               strokeWidth={3}
               dot={false}
@@ -223,7 +225,7 @@ const RepaymentChart: React.FC<RepaymentChartProps> = ({
             <Line
               type="monotone"
               dataKey="interestFixedMinimum"
-              name={`Fixed (${formatCurrency(initialMinimumPayment)})`}
+              name={`Fixed Payment Equal to Initial Minimum (${formatCurrency(initialMinimumPayment, currencyCode)})`}
               stroke="#5A9AFF"
               strokeWidth={3}
               dot={false}
@@ -233,7 +235,7 @@ const RepaymentChart: React.FC<RepaymentChartProps> = ({
             <Line
               type="monotone"
               dataKey="interestFixedCustom"
-              name={`Fixed (${formatCurrency(fixedAmount)})`}
+              name={`Fixed Custom Payment (${formatCurrency(fixedAmount, currencyCode)})`}
               stroke="#5AFF8F"
               strokeWidth={3}
               dot={false}
@@ -259,7 +261,7 @@ const RepaymentChart: React.FC<RepaymentChartProps> = ({
             <Line
               type="monotone"
               dataKey="cumulativePaymentFixedMinimum"
-              name={`Fixed (${formatCurrency(initialMinimumPayment)})`}
+              name={`Fixed Payment Equal to Initial Minimum (${formatCurrency(initialMinimumPayment, currencyCode)})`}
               stroke="#5A9AFF"
               strokeWidth={3}
               dot={false}
@@ -269,7 +271,7 @@ const RepaymentChart: React.FC<RepaymentChartProps> = ({
             <Line
               type="monotone"
               dataKey="cumulativePaymentFixedCustom"
-              name={`Fixed (${formatCurrency(fixedAmount)})`}
+              name={`Fixed Custom Payment (${formatCurrency(fixedAmount, currencyCode)})`}
               stroke="#5AFF8F"
               strokeWidth={3}
               dot={false}
@@ -295,7 +297,7 @@ const RepaymentChart: React.FC<RepaymentChartProps> = ({
             <Line
               type="monotone"
               dataKey="cumulativeInterestFixedMinimum"
-              name={`Fixed (${formatCurrency(initialMinimumPayment)})`}
+              name={`Fixed Payment Equal to Initial Minimum (${formatCurrency(initialMinimumPayment, currencyCode)})`}
               stroke="#5A9AFF"
               strokeWidth={3}
               dot={false}
@@ -305,7 +307,7 @@ const RepaymentChart: React.FC<RepaymentChartProps> = ({
             <Line
               type="monotone"
               dataKey="cumulativeInterestFixedCustom"
-              name={`Fixed (${formatCurrency(fixedAmount)})`}
+              name={`Fixed Custom Payment (${formatCurrency(fixedAmount, currencyCode)})`}
               stroke="#5AFF8F"
               strokeWidth={3}
               dot={false}
@@ -370,7 +372,7 @@ const RepaymentChart: React.FC<RepaymentChartProps> = ({
                 margin={{
                   top: 5,
                   right: 30,
-                  left: 20,
+                  left: 40, // Increased from 20 to give more space for the Y-axis label
                   bottom: 5,
                 }}
               >
@@ -389,7 +391,8 @@ const RepaymentChart: React.FC<RepaymentChartProps> = ({
                     value: getYAxisLabel(), 
                     angle: -90, 
                     position: 'insideLeft',
-                    style: { textAnchor: 'middle' }
+                    style: { textAnchor: 'middle' },
+                    dx: -30 // Moved label further to the left
                   }}
                 />
                 <Tooltip content={<CustomTooltip />} />

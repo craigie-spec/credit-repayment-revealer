@@ -19,6 +19,7 @@ interface RepaymentTableProps {
   fixedCustomPayments: RepaymentScenario[];
   initialMinimumPayment: number;
   fixedAmount: number;
+  currencyCode: string;
 }
 
 const RepaymentTable: React.FC<RepaymentTableProps> = ({
@@ -27,6 +28,7 @@ const RepaymentTable: React.FC<RepaymentTableProps> = ({
   fixedCustomPayments,
   initialMinimumPayment,
   fixedAmount,
+  currencyCode,
 }) => {
   const [displayRange, setDisplayRange] = useState<string>("all");
   const [activeTab, setActiveTab] = useState<string>("scenario1");
@@ -67,9 +69,9 @@ const RepaymentTable: React.FC<RepaymentTableProps> = ({
       case "scenario1":
         return "Minimum Payment Only";
       case "scenario2":
-        return `Fixed Payment (${formatCurrency(initialMinimumPayment)})`;
+        return `Fixed Payment Equal to Initial Minimum (${formatCurrency(initialMinimumPayment, currencyCode)})`;
       case "scenario3":
-        return `Fixed Payment (${formatCurrency(fixedAmount)})`;
+        return `Fixed Custom Payment (${formatCurrency(fixedAmount, currencyCode)})`;
       default:
         return "";
     }
@@ -143,9 +145,9 @@ const RepaymentTable: React.FC<RepaymentTableProps> = ({
                 {getScenarioData().map((item) => (
                   <TableRow key={item.month}>
                     <TableCell className="font-medium">{item.month}</TableCell>
-                    <TableCell>{formatCurrency(item.payment)}</TableCell>
-                    <TableCell>{formatCurrency(item.interest)}</TableCell>
-                    <TableCell>{formatCurrency(item.balance)}</TableCell>
+                    <TableCell>{formatCurrency(item.payment, currencyCode)}</TableCell>
+                    <TableCell>{formatCurrency(item.interest, currencyCode)}</TableCell>
+                    <TableCell>{formatCurrency(item.balance, currencyCode)}</TableCell>
                   </TableRow>
                 ))}
                 {getScenarioData().length === 0 && (

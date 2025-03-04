@@ -138,10 +138,18 @@ export const calculateRepaymentScenarios = (
   };
 };
 
-export const formatCurrency = (amount: number): string => {
-  return new Intl.NumberFormat('en-US', {
+export const formatCurrency = (amount: number, currencyCode: string = 'USD'): string => {
+  const currencyMap: Record<string, { code: string, symbol: string }> = {
+    'USD': { code: 'en-US', symbol: '$' },
+    'EUR': { code: 'de-DE', symbol: '€' },
+    'GBP': { code: 'en-GB', symbol: '£' },
+  };
+
+  const { code, symbol } = currencyMap[currencyCode] || currencyMap['USD'];
+  
+  return new Intl.NumberFormat(code, {
     style: 'currency',
-    currency: 'USD',
+    currency: currencyCode,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   }).format(amount);

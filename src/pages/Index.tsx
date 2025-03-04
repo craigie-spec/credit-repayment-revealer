@@ -4,6 +4,8 @@ import CreditCardForm from "@/components/CreditCardForm";
 import RepaymentChart from "@/components/RepaymentChart";
 import RepaymentTable from "@/components/RepaymentTable";
 import ResultsSummary from "@/components/ResultsSummary";
+import ComparisonTable from "@/components/ComparisonTable";
+import CurrencySelector from "@/components/CurrencySelector";
 import { calculateRepaymentScenarios, CalculationResult } from "@/utils/calculator";
 import { Separator } from "@/components/ui/separator";
 import { CreditCard } from "lucide-react";
@@ -17,6 +19,7 @@ const Index = () => {
     fixedAmount: 0,
   });
   const [isCalculating, setIsCalculating] = useState(false);
+  const [currencyCode, setCurrencyCode] = useState<string>("USD");
 
   const handleCalculate = (values: {
     balance: number;
@@ -41,6 +44,10 @@ const Index = () => {
     }, 500);
   };
 
+  const handleCurrencyChange = (newCurrency: string) => {
+    setCurrencyCode(newCurrency);
+  };
+
   return (
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card shadow-sm">
@@ -60,6 +67,14 @@ const Index = () => {
               initialMinimumPayment={calculationResult?.initialMinimumPayment ?? null}
               isLoading={isCalculating}
             />
+            
+            <div className="mt-6">
+              <h3 className="text-lg font-medium mb-2">Display Currency</h3>
+              <CurrencySelector 
+                currency={currencyCode} 
+                onCurrencyChange={handleCurrencyChange} 
+              />
+            </div>
           </div>
           
           <div className="md:col-span-8 space-y-8">
@@ -74,6 +89,7 @@ const Index = () => {
                 timeToPayFixedCustom={calculationResult.timeToPayFixedCustom}
                 initialMinimumPayment={calculationResult.initialMinimumPayment}
                 fixedAmount={formValues.fixedAmount}
+                currencyCode={currencyCode}
               />
             ) : (
               <div className="flex items-center justify-center h-64 bg-muted/20 rounded-lg border border-dashed animate-pulse">
@@ -96,12 +112,22 @@ const Index = () => {
             <Separator className="my-8" />
             
             <div className="space-y-8">
+              <ComparisonTable
+                minimumPayments={calculationResult.minimumPayments}
+                fixedMinimumPayments={calculationResult.fixedMinimumPayments}
+                fixedCustomPayments={calculationResult.fixedCustomPayments}
+                initialMinimumPayment={calculationResult.initialMinimumPayment}
+                fixedAmount={formValues.fixedAmount}
+                currencyCode={currencyCode}
+              />
+              
               <RepaymentChart
                 minimumPayments={calculationResult.minimumPayments}
                 fixedMinimumPayments={calculationResult.fixedMinimumPayments}
                 fixedCustomPayments={calculationResult.fixedCustomPayments}
                 initialMinimumPayment={calculationResult.initialMinimumPayment}
                 fixedAmount={formValues.fixedAmount}
+                currencyCode={currencyCode}
               />
               
               <RepaymentTable
@@ -110,6 +136,7 @@ const Index = () => {
                 fixedCustomPayments={calculationResult.fixedCustomPayments}
                 initialMinimumPayment={calculationResult.initialMinimumPayment}
                 fixedAmount={formValues.fixedAmount}
+                currencyCode={currencyCode}
               />
             </div>
           </>
