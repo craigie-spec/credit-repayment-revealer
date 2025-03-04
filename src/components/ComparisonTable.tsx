@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { formatCurrency } from "@/utils/calculator";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 
 interface RepaymentScenario {
   month: number;
@@ -95,6 +96,24 @@ const ComparisonTable: React.FC<ComparisonTableProps> = ({
 
   const monthsToShow = getMonthsToShow();
 
+  // Create chart data
+  const prepareChartData = () => {
+    return monthsToShow.map(month => {
+      const minData = getScenarioDataForMonth(minimumPayments, month);
+      const fixedMinData = getScenarioDataForMonth(fixedMinimumPayments, month);
+      const fixedCustomData = getScenarioDataForMonth(fixedCustomPayments, month);
+
+      return {
+        month,
+        "Minimum Payment": minData ? minData.balance : 0,
+        "Fixed Initial Minimum": fixedMinData ? fixedMinData.balance : 0,
+        "Fixed Custom Amount": fixedCustomData ? fixedCustomData.balance : 0,
+      };
+    });
+  };
+
+  const chartData = prepareChartData();
+
   return (
     <Card className="shadow-md hover:shadow-lg transition-all duration-300 animate-fade-in">
       <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between">
@@ -123,6 +142,60 @@ const ComparisonTable: React.FC<ComparisonTableProps> = ({
       </CardHeader>
       
       <CardContent>
+        {/* Line chart showing all three scenarios */}
+        <div className="mb-8 h-80">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart
+              data={chartData}
+              margin={{ top: 5, right: 30, left: 30, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis 
+                dataKey="month" 
+                label={{ 
+                  value: 'Month', 
+                  position: 'insideBottomRight', 
+                  offset: -5 
+                }} 
+              />
+              <YAxis 
+                label={{ 
+                  value: 'Balance', 
+                  angle: -90, 
+                  position: 'insideLeft',
+                  style: { textAnchor: 'middle' },
+                  offset: -20
+                }}
+                tickFormatter={(value) => formatCurrency(value, currencyCode).replace(/[^\d.,]/g, '')}
+              />
+              <Tooltip 
+                formatter={(value) => [formatCurrency(Number(value), currencyCode), 'Balance']}
+                labelFormatter={(value) => `Month ${value}`}
+              />
+              <Legend />
+              <Line 
+                type="monotone" 
+                dataKey="Minimum Payment" 
+                stroke="#ef4444" // Red
+                strokeWidth={2}
+                activeDot={{ r: 8 }}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="Fixed Initial Minimum" 
+                stroke="#eab308" // Yellow
+                strokeWidth={2}
+              />
+              <Line 
+                type="monotone" 
+                dataKey="Fixed Custom Amount" 
+                stroke="#3b82f6" // Blue
+                strokeWidth={2}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+
         <div className="overflow-x-auto">
           <Table>
             <TableHeader className="bg-muted/50 sticky top-0">
@@ -131,10 +204,10 @@ const ComparisonTable: React.FC<ComparisonTableProps> = ({
                 <TableHead colSpan={3} className="text-center bg-red-50 dark:bg-red-950/20">
                   Scenario 1: Minimum Payment
                 </TableHead>
-                <TableHead colSpan={3} className="text-center bg-blue-50 dark:bg-blue-950/20">
+                <TableHead colSpan={3} className="text-center bg-yellow-50 dark:bg-yellow-950/20">
                   Scenario 2: Fixed Payment Equal to Initial Minimum
                 </TableHead>
-                <TableHead colSpan={3} className="text-center bg-green-50 dark:bg-green-950/20">
+                <TableHead colSpan={3} className="text-center bg-blue-50 dark:bg-blue-950/20">
                   Scenario 3: Fixed Custom Payment
                 </TableHead>
               </TableRow>
@@ -145,13 +218,13 @@ const ComparisonTable: React.FC<ComparisonTableProps> = ({
                 <TableHead className="bg-red-50/70 dark:bg-red-950/10">Interest</TableHead>
                 <TableHead className="bg-red-50/70 dark:bg-red-950/10">Balance</TableHead>
                 
+                <TableHead className="bg-yellow-50/70 dark:bg-yellow-950/10">Payment</TableHead>
+                <TableHead className="bg-yellow-50/70 dark:bg-yellow-950/10">Interest</TableHead>
+                <TableHead className="bg-yellow-50/70 dark:bg-yellow-950/10">Balance</TableHead>
+                
                 <TableHead className="bg-blue-50/70 dark:bg-blue-950/10">Payment</TableHead>
                 <TableHead className="bg-blue-50/70 dark:bg-blue-950/10">Interest</TableHead>
                 <TableHead className="bg-blue-50/70 dark:bg-blue-950/10">Balance</TableHead>
-                
-                <TableHead className="bg-green-50/70 dark:bg-green-950/10">Payment</TableHead>
-                <TableHead className="bg-green-50/70 dark:bg-green-950/10">Interest</TableHead>
-                <TableHead className="bg-green-50/70 dark:bg-green-950/10">Balance</TableHead>
               </TableRow>
             </TableHeader>
             
@@ -185,35 +258,35 @@ const ComparisonTable: React.FC<ComparisonTableProps> = ({
                     
                     {/* Scenario 1 data */}
                     <TableCell>
-                      {minData ? formatCurrency(minData.payment, currencyCode) : "-"}
+                      {minData ? formatCurrency(minData.payment, currencyCode) : formatCurrency(0, currencyCode)}
                     </TableCell>
                     <TableCell>
-                      {minData ? formatCurrency(minData.interest, currencyCode) : "-"}
+                      {minData ? formatCurrency(minData.interest, currencyCode) : formatCurrency(0, currencyCode)}
                     </TableCell>
                     <TableCell>
-                      {minData ? formatCurrency(minData.balance, currencyCode) : "-"}
+                      {minData ? formatCurrency(minData.balance, currencyCode) : formatCurrency(0, currencyCode)}
                     </TableCell>
                     
                     {/* Scenario 2 data */}
                     <TableCell>
-                      {fixedMinData ? formatCurrency(fixedMinData.payment, currencyCode) : "-"}
+                      {fixedMinData ? formatCurrency(fixedMinData.payment, currencyCode) : formatCurrency(0, currencyCode)}
                     </TableCell>
                     <TableCell>
-                      {fixedMinData ? formatCurrency(fixedMinData.interest, currencyCode) : "-"}
+                      {fixedMinData ? formatCurrency(fixedMinData.interest, currencyCode) : formatCurrency(0, currencyCode)}
                     </TableCell>
                     <TableCell>
-                      {fixedMinData ? formatCurrency(fixedMinData.balance, currencyCode) : "-"}
+                      {fixedMinData ? formatCurrency(fixedMinData.balance, currencyCode) : formatCurrency(0, currencyCode)}
                     </TableCell>
                     
                     {/* Scenario 3 data */}
                     <TableCell>
-                      {fixedCustomData ? formatCurrency(fixedCustomData.payment, currencyCode) : "-"}
+                      {fixedCustomData ? formatCurrency(fixedCustomData.payment, currencyCode) : formatCurrency(0, currencyCode)}
                     </TableCell>
                     <TableCell>
-                      {fixedCustomData ? formatCurrency(fixedCustomData.interest, currencyCode) : "-"}
+                      {fixedCustomData ? formatCurrency(fixedCustomData.interest, currencyCode) : formatCurrency(0, currencyCode)}
                     </TableCell>
                     <TableCell>
-                      {fixedCustomData ? formatCurrency(fixedCustomData.balance, currencyCode) : "-"}
+                      {fixedCustomData ? formatCurrency(fixedCustomData.balance, currencyCode) : formatCurrency(0, currencyCode)}
                     </TableCell>
                   </TableRow>
                 );
