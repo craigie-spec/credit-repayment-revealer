@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import CreditCardForm from "@/components/CreditCardForm";
 import RepaymentChart from "@/components/RepaymentChart";
@@ -62,19 +61,17 @@ const Index = () => {
       <main className="container px-4 py-8 space-y-8 max-w-7xl">
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
           <div className="md:col-span-4">
+            <h3 className="text-lg font-medium mb-2">Display Currency</h3>
+            <CurrencySelector 
+              currency={currencyCode} 
+              onCurrencyChange={handleCurrencyChange} 
+            />
+            
             <CreditCardForm
               onCalculate={handleCalculate}
               initialMinimumPayment={calculationResult?.initialMinimumPayment ?? null}
               isLoading={isCalculating}
             />
-            
-            <div className="mt-6">
-              <h3 className="text-lg font-medium mb-2">Display Currency</h3>
-              <CurrencySelector 
-                currency={currencyCode} 
-                onCurrencyChange={handleCurrencyChange} 
-              />
-            </div>
           </div>
           
           <div className="md:col-span-8 space-y-8">

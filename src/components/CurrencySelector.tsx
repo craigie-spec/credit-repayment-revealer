@@ -14,12 +14,13 @@ const CurrencySelector: React.FC<CurrencySelectorProps> = ({
   onCurrencyChange,
 }) => {
   return (
-    <Card className="shadow-sm">
-      <CardContent className="pt-6">
+    <Card className="shadow-sm mb-6">
+      <CardContent className="pt-4 pb-4">
+        <Label className="block mb-2 font-medium">Select Currency</Label>
         <RadioGroup
           value={currency}
           onValueChange={onCurrencyChange}
-          className="flex space-x-2"
+          className="flex space-x-4"
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="USD" id="usd" />
