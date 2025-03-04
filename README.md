@@ -1,22 +1,17 @@
-# Welcome to your Lovable project
+
+# Credit Repayment Revealer
 
 ## Project info
 
-**URL**: https://lovable.dev/projects/27a901e8-4b87-4253-88c0-0bdd9cea311a
+This application helps users understand different credit card repayment strategies by visualizing payment schedules and comparing various repayment scenarios.
 
 ## How can I edit this code?
 
 There are several ways of editing your application.
 
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/27a901e8-4b87-4253-88c0-0bdd9cea311a) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
 **Use your preferred IDE**
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+If you want to work locally using your own IDE, you can clone this repo and push changes.
 
 The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
 
@@ -52,7 +47,7 @@ npm run dev
 
 ## What technologies are used for this project?
 
-This project is built with .
+This project is built with:
 
 - Vite
 - TypeScript
@@ -62,8 +57,13 @@ This project is built with .
 
 ## How can I deploy this project?
 
-Simply open [Lovable](https://lovable.dev/projects/27a901e8-4b87-4253-88c0-0bdd9cea311a) and click on Share -> Publish.
+You can deploy this project using services like Netlify, Vercel, or GitHub Pages.
 
-## I want to use a custom domain - is that possible?
+## Using a custom domain
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+To use a custom domain, you'll need to:
+
+1. Deploy your application to a service like Netlify or Vercel
+2. Follow their documentation on setting up custom domains
+3. Update your DNS settings accordingly
+
