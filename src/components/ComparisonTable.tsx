@@ -30,7 +30,7 @@ const ComparisonTable: React.FC<ComparisonTableProps> = ({
   fixedAmount,
   currencyCode,
 }) => {
-  const [displayRange, setDisplayRange] = useState<string>("first12");
+  const [displayRange, setDisplayRange] = useState<string>("all");
   
   // Format time helper function
   const formatTime = (months: number): string => {

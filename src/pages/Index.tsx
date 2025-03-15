@@ -1,9 +1,8 @@
+
 import React, { useState } from "react";
 import CreditCardForm from "@/components/CreditCardForm";
-import RepaymentChart from "@/components/RepaymentChart";
-import RepaymentTable from "@/components/RepaymentTable";
-import ResultsSummary from "@/components/ResultsSummary";
 import ComparisonTable from "@/components/ComparisonTable";
+import ResultsSummary from "@/components/ResultsSummary";
 import CurrencySelector from "@/components/CurrencySelector";
 import { calculateRepaymentScenarios, CalculationResult } from "@/utils/calculator";
 import { Separator } from "@/components/ui/separator";
@@ -110,24 +109,6 @@ const Index = () => {
             
             <div className="space-y-8">
               <ComparisonTable
-                minimumPayments={calculationResult.minimumPayments}
-                fixedMinimumPayments={calculationResult.fixedMinimumPayments}
-                fixedCustomPayments={calculationResult.fixedCustomPayments}
-                initialMinimumPayment={calculationResult.initialMinimumPayment}
-                fixedAmount={formValues.fixedAmount}
-                currencyCode={currencyCode}
-              />
-              
-              <RepaymentChart
-                minimumPayments={calculationResult.minimumPayments}
-                fixedMinimumPayments={calculationResult.fixedMinimumPayments}
-                fixedCustomPayments={calculationResult.fixedCustomPayments}
-                initialMinimumPayment={calculationResult.initialMinimumPayment}
-                fixedAmount={formValues.fixedAmount}
-                currencyCode={currencyCode}
-              />
-              
-              <RepaymentTable
                 minimumPayments={calculationResult.minimumPayments}
                 fixedMinimumPayments={calculationResult.fixedMinimumPayments}
                 fixedCustomPayments={calculationResult.fixedCustomPayments}
